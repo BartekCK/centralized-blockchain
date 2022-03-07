@@ -1,5 +1,6 @@
 import knex, { Knex } from 'knex';
 import { sleep } from '../../common/utils/sleep';
+import { LoggerServiceInterface } from '../../common/services';
 
 export interface IConfigParams {
   host: string;
@@ -18,7 +19,10 @@ export class DatabaseConnector {
     return this._db;
   }
 
-  static async connect(connection: IConfigParams): Promise<Knex> {
+  static async connect(
+    connection: IConfigParams,
+    logger: LoggerServiceInterface,
+  ): Promise<Knex> {
     if (!DatabaseConnector.connector) {
       const db = knex({
         client: 'postgresql',
@@ -33,9 +37,10 @@ export class DatabaseConnector {
 
     try {
       const result = await DatabaseConnector.checkConnection();
-      console.log(result);
+
+      logger.debug(result);
     } catch (error) {
-      console.log('PostgreSQL not connected');
+      logger.fatal('PostgreSQL not connected');
     }
 
     return DatabaseConnector.connector.db;

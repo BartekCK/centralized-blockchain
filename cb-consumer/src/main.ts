@@ -1,9 +1,26 @@
-import { BlockService } from './infrastructure/services/block.service';
-import { ValueData } from './domain/value-objects/value-data';
 import { DatabaseConnector } from './infrastructure/config/database-connector';
-import {EnvConfig} from "./infrastructure/config/env-config";
+import { EnvConfig } from './infrastructure/config/env-config';
+import { LoggerService } from './common/services/logger.service';
+import { BlockRepository } from './infrastructure/repositories/block.repository';
+import { BlockService } from './infrastructure/services/block.service';
 
-const connection = DatabaseConnector.connect(EnvConfig.getDatabaseConfigParams());
+const main = async () => {
+  const appLogger = new LoggerService();
+  const dbLogger = new LoggerService('DATABASE');
+
+  const connection = await DatabaseConnector.connect(
+    EnvConfig.getDatabaseConfigParams(),
+    dbLogger,
+  );
+
+  const blockRepository = new BlockRepository(connection);
+
+  const blockService = new BlockService(blockRepository);
+
+  appLogger.info('Application successfully started');
+};
+
+main();
 
 //
 // const chain = BlockService.create(1);
