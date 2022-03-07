@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    volumes:
+      - ./.db/data:/var/lib/postgresql/data
+
+  server:
+    container_name: consumer
+    build:
+      target: development
+      context: ./cb-consumer
+      dockerfile: .docker/dockerfile
+    volumes:
+      - ./cb-consumer/src:/usr/consumer/src
+      - ./cb-consumer/package.json:/usr/consumer/package.json
+      - ./cb-consumer/node_modules:/usr/consumer/node_modules
+    env_file:
+      - ./cb-consumer/.env

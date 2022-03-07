@@ -1,0 +1,13 @@
+FROM node:14.17-alpine3.13 AS development
+
+ENV NODE_ENV=development
+
+WORKDIR /usr/consumer
+
+COPY package*.json .
+COPY tsconfig.json .
+COPY src .
+
+RUN npm install
+
+CMD ["npm", "run", "dev"]
