@@ -7,13 +7,17 @@ import { BlockService } from './application/services/block.service';
 const main = async () => {
   const appLogger = new LoggerService();
   const dbLogger = new LoggerService('DATABASE');
+  const blockRepositoryLogger = new LoggerService('BLOCK_REPOSITORY');
 
   const connection = await DatabaseConnector.connect(
     EnvConfig.getDatabaseConfigParams(),
     dbLogger,
   );
 
-  const blockRepository = new BlockRepository(connection);
+  const blockRepository = new BlockRepository(
+    connection,
+    blockRepositoryLogger,
+  );
 
   const blockService = new BlockService(blockRepository);
 

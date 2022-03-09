@@ -5,7 +5,7 @@ export type BlockDbDetails = {
   hash: string | null;
   pow: number;
   data: string;
-  previousHash: string | null;
+  previous_hash: string | null;
 
   created_at: string;
   updated_at: string;

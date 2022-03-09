@@ -4,16 +4,28 @@ import { ValueData } from '../../domain/value-objects/value-data';
 
 export abstract class BlockMapper {
   static mapBlockDbDetailsToBlock(blockDbDetails: BlockDbDetails): Block {
-    const { timestamp, hash, data, pow, previousHash } = blockDbDetails;
+    const { timestamp, hash, data, pow, previous_hash } = blockDbDetails;
 
     const valueData = new ValueData(data);
 
     return Block.createMinedBlock({
       pow,
       hash,
-      previousHash,
+      previousHash: previous_hash,
       timestamp,
       data: valueData,
     });
+  }
+
+  static mapBlockToBlockDbDetails(
+    block: Block,
+  ): Omit<BlockDbDetails, 'id' | 'created_at' | 'updated_at'> {
+    return {
+      pow: block.pow,
+      hash: block.hash,
+      data: block.data.message,
+      previous_hash: block.previousHash,
+      timestamp: block.timestamp,
+    };
   }
 }

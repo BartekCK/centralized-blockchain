@@ -10,20 +10,20 @@ interface IConstructor {
 }
 
 export class Block {
-  private readonly data: ValueData;
+  private readonly _data: ValueData;
   private readonly _previousHash: string | null;
   private readonly _timestamp: number = Date.now();
 
   private _hash: string | null = null;
-  private pow: number = 0;
+  private _pow: number = 0;
 
   private constructor(params: IConstructor) {
     const { previousHash, pow, data, hash, timestamp } = params;
 
-    this.data = data;
+    this._data = data;
     this._previousHash = previousHash;
 
-    this.pow = pow || 0;
+    this._pow = pow || 0;
     this._hash = hash || null;
     this._timestamp = timestamp || Date.now();
   }
@@ -34,6 +34,14 @@ export class Block {
 
   static createMinedBlock(params: Required<IConstructor>) {
     return new Block(params);
+  }
+
+  get data(): ValueData {
+    return this._data;
+  }
+
+  get pow(): number {
+    return this._pow;
   }
 
   get hash(): string | null {
@@ -55,15 +63,15 @@ export class Block {
 
     const regex = new RegExp(`^(0){${difficulty}}.*`);
     while (!this._hash || !this._hash.match(regex)) {
-      this.pow++;
+      this._pow++;
       this._hash = this.calculateHash();
     }
   };
 
   public calculateHash = (): string => {
-    const data = JSON.stringify(this.data.message);
+    const data = JSON.stringify(this._data.message);
     const blockData =
-      data + this._previousHash + this._timestamp + this.pow.toString();
+      data + this._previousHash + this._timestamp + this._pow.toString();
 
     return createHash('sha256').update(blockData).digest('hex');
   };
