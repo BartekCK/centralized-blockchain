@@ -23,7 +23,8 @@ export class BlockService implements BlockServiceInterface {
 
     const { data: lastBlock } = lastBlockResult;
 
-    const newBlock = new Block(valueData, lastBlock?.hash || null);
+    const newBlock = Block.createBlock(valueData, lastBlock?.hash || null);
+
     newBlock.mine(this.difficulty);
 
     const savedBlockResult = await this.blockRepository.saveBlock(newBlock);
