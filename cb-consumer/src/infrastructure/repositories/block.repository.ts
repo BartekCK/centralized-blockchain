@@ -1,34 +1,30 @@
 import { Block } from '../../domain/entities/block.entity';
+
 import {
-  DatabaseFailure,
-  GetBlockByHashSuccess,
-  GetBlocksSuccess,
-  GetLastBlockSuccess,
-  SaveBlockSuccess,
-} from './index';
-import { BlockRepositoryInterface } from './block.repository.interface';
+  BlockRepositoryInterface,
+  GetBlockByHashResult,
+  GetBlocksResult,
+  GetLastBlockResult,
+  SaveBlockResult,
+} from './block.repository.interface';
 import { Knex } from 'knex';
 
 export class BlockRepository implements BlockRepositoryInterface {
   constructor(private readonly db: Knex) {}
 
-  saveBlock(block: Block): Promise<SaveBlockSuccess | DatabaseFailure> {
+  saveBlock(block: Block): Promise<SaveBlockResult> {
     throw new Error('Method not implemented.');
   }
 
-  getLastBlock(): Promise<DatabaseFailure | GetLastBlockSuccess> {
+  getLastBlock(): Promise<GetLastBlockResult> {
     throw new Error('Method not implemented.');
   }
 
-  getBlockByHash(
-    hash: string,
-  ): Promise<DatabaseFailure | GetBlockByHashSuccess> {
+  getBlockByHash(hash: string): Promise<GetBlockByHashResult> {
     throw new Error('Method not implemented.');
   }
 
-  getBlocksBefore(
-    timestamp: number,
-  ): Promise<DatabaseFailure | GetBlocksSuccess> {
+  getBlocksBefore(timestamp: number): Promise<GetBlocksResult> {
     throw new Error('Method not implemented.');
   }
 }

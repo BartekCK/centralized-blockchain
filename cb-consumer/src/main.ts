@@ -2,7 +2,7 @@ import { DatabaseConnector } from './infrastructure/config/database-connector';
 import { EnvConfig } from './infrastructure/config/env-config';
 import { LoggerService } from './common/services/logger.service';
 import { BlockRepository } from './infrastructure/repositories/block.repository';
-import { BlockService } from './infrastructure/services/block.service';
+import { BlockService } from './application/services/block.service';
 
 const main = async () => {
   const appLogger = new LoggerService();

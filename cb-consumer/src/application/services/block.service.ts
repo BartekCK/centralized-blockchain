@@ -3,8 +3,8 @@ import { ValueData } from '../../domain/value-objects/value-data';
 import { isFailure } from '../../common/utils/isFailure';
 import { Success } from '../../common/interfaces/success';
 import { Failure } from '../../common/interfaces/failure';
-import { BlockRepositoryInterface } from '../repositories/block.repository.interface';
-import { BlockServiceInterface } from '../../handlers/services/block.service';
+import { BlockRepositoryInterface } from '../../infrastructure/repositories/block.repository.interface';
+import { BlockServiceInterface } from './block.service.interface';
 
 type CreateBlockResult = Success<Block> | Failure;
 type ValidateBlockResult = Success<boolean> | Failure;
