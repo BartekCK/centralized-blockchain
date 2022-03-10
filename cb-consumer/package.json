@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/main.ts"
+    "dev": "nodemon src/main.ts",
+    "migrations:create": "knex migrate:make -x ts",
+    "migrations:up": "knex migrate:up",
+    "migrations:down": "knex migrate:down"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +22,8 @@
   "devDependencies": {
     "@types/log4js": "^2.3.5",
     "@types/node": "^17.0.18",
+    "dotenv": "^16.0.0",
+    "jest": "^27.5.1",
     "prettier": "^2.5.1"
   }
 }

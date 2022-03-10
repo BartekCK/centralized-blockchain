@@ -19,6 +19,21 @@ export class DatabaseConnector {
     return this._db;
   }
 
+  static getConnectionData(
+    connection: IConfigParams,
+    rest?: Partial<Knex.Config>,
+  ): Knex.Config {
+    return {
+      client: 'postgresql',
+      connection,
+      pool: {
+        min: 2,
+        max: 10,
+      },
+      ...rest,
+    };
+  }
+
   static async connect(
     connection: IConfigParams,
     logger: LoggerServiceInterface,
