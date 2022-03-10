@@ -34,6 +34,14 @@ export class DatabaseConnector {
     };
   }
 
+  static async close() {
+    if (!DatabaseConnector.connector) {
+      return;
+    }
+
+    await DatabaseConnector.connector.db.destroy();
+  }
+
   static async connect(
     connection: IConfigParams,
     logger: LoggerServiceInterface,

@@ -7,7 +7,9 @@
     "dev": "nodemon src/main.ts",
     "migrations:create": "knex migrate:make -x ts",
     "migrations:up": "knex migrate:up",
-    "migrations:down": "knex migrate:down"
+    "migrations:down": "knex migrate:down",
+    "migrations:all": "knex migrate:latest",
+    "test:int": "NODE_ENV=test npm run migrations:all && jest -i --verbose"
   },
   "author": "",
   "license": "ISC",
@@ -20,10 +22,12 @@
     "typescript": "^4.5.5"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "@types/log4js": "^2.3.5",
     "@types/node": "^17.0.18",
     "dotenv": "^16.0.0",
     "jest": "^27.5.1",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.3"
   }
 }

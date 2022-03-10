@@ -1,7 +1,7 @@
 export type BlockDbDetails = {
   id: string;
 
-  timestamp: number;
+  timestamp: Date;
   hash: string | null;
   pow: number;
   data: string;

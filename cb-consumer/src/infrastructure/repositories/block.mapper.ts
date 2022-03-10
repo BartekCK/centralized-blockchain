@@ -12,7 +12,7 @@ export abstract class BlockMapper {
       pow,
       hash,
       previousHash: previous_hash,
-      timestamp,
+      timestamp: timestamp.getTime(),
       data: valueData,
     });
   }
@@ -25,7 +25,7 @@ export abstract class BlockMapper {
       hash: block.hash,
       data: block.data.message,
       previous_hash: block.previousHash,
-      timestamp: block.timestamp,
+      timestamp: new Date(block.timestamp),
     };
   }
 }
