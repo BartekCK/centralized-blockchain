@@ -1,11 +1,13 @@
 import { DatabaseConnector } from '../../config/database-connector';
 import { EnvConfig } from '../../config/env-config';
-import { LoggerService } from '../../../common/services/logger.service';
 import { Knex } from 'knex';
 import { BlockRepositoryInterface } from '../block.repository.interface';
 import { BlockRepository } from '../block.repository';
 import { Block } from '../../../domain/entities/block.entity';
 import { ValueData } from '../../../domain/value-objects/value-data';
+import { createBlocksSyncHappyPath } from './mocks/blocks.happy.path.mock';
+import { isSuccessAssert } from '../../../common/__tests__/helpers/isSuccessAssert';
+import { LoggerServiceMock } from '../../../common/services/mocks/logger.service.mock';
 
 describe('Block repository implementation integration test', () => {
   let db: Knex;
@@ -13,17 +15,16 @@ describe('Block repository implementation integration test', () => {
   let repository: BlockRepositoryInterface;
 
   beforeEach(async () => {
-    const connectionLogger = new LoggerService('DATABASE_TEST');
-    const repositoryLogger = new LoggerService('REPOSITORY_TEST');
+    const logger = new LoggerServiceMock();
 
     db = await DatabaseConnector.connect(
       await EnvConfig.getDatabaseConfigParams(),
-      connectionLogger,
+      logger,
     );
 
     await db.raw(`TRUNCATE "block"`);
 
-    repository = new BlockRepository(db, repositoryLogger);
+    repository = new BlockRepository(db, logger);
   });
 
   afterEach(async () => {
@@ -59,6 +60,57 @@ describe('Block repository implementation integration test', () => {
         previous_hash: block.previousHash,
         created_at: expect.any(Date),
         updated_at: expect.any(Date),
+      });
+    });
+  });
+
+  describe('should get', () => {
+    let blocks: Block[];
+
+    beforeEach(async () => {
+      blocks = await createBlocksSyncHappyPath();
+
+      await Promise.all(
+        blocks.map((block) => {
+          repository.saveBlock(block);
+        }),
+      );
+    });
+
+    it('only last block "getLastBlock"', async () => {
+      const lastBlockResult = await repository.getLastBlock();
+
+      isSuccessAssert(lastBlockResult);
+
+      const { data: lastBlock } = lastBlockResult;
+
+      expect(lastBlock!.hash).toEqual(blocks[blocks.length - 1].hash!);
+    });
+
+    it('block by hash', async () => {
+      const block = blocks[0];
+      const lastBlockResult = await repository.getBlockByHash(block.hash!);
+
+      isSuccessAssert(lastBlockResult);
+
+      const { data: resultBlock } = lastBlockResult;
+
+      expect(resultBlock!.hash).toEqual(block.hash!);
+    });
+
+    it('all blocks before', async () => {
+      const index = 4;
+      const block = blocks[index];
+      const getBlocksBeforeResult = await repository.getBlocksBefore(
+        block.timestamp,
+      );
+      isSuccessAssert(getBlocksBeforeResult);
+
+      const { data: blocksBefore } = getBlocksBeforeResult;
+
+      expect(blocksBefore.length).toEqual(index);
+      blocksBefore.reverse().map((el, innerIndex) => {
+        expect(el.hash).toEqual(blocks[innerIndex].hash);
       });
     });
   });

@@ -10,12 +10,12 @@ import {
 import { Knex } from 'knex';
 import { BlockDbDetails } from './block.details';
 import { BlockMapper } from './block.mapper';
-import { LoggerService } from '../../common/services/logger.service';
+import { LoggerServiceInterface } from '../../common/services';
 
 export class BlockRepository implements BlockRepositoryInterface {
   constructor(
     private readonly db: Knex,
-    private readonly logger: LoggerService,
+    private readonly logger: LoggerServiceInterface,
   ) {}
 
   async saveBlock(block: Block): Promise<SaveBlockResult> {
@@ -78,7 +78,8 @@ export class BlockRepository implements BlockRepositoryInterface {
       const blockDbRecord = await this.db
         .select('*')
         .from<BlockDbDetails>('block')
-        .whereRaw(`block.timestamp < to_timestamp(${timestamp})`);
+        .whereRaw(`block.timestamp < '${new Date(timestamp).toISOString()}'`)
+        .orderBy([{ column: 'timestamp', order: 'desc' }]);
 
       return {
         outcome: 'SUCCESS',

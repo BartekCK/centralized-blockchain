@@ -9,7 +9,7 @@
     "migrations:up": "knex migrate:up",
     "migrations:down": "knex migrate:down",
     "migrations:all": "knex migrate:latest",
-    "test:int": "NODE_ENV=test npm run migrations:all && jest -i --verbose"
+    "test:int": "NODE_ENV=test npm run migrations:all && jest --runInBand --verbose"
   },
   "author": "",
   "license": "ISC",

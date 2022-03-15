@@ -11,7 +11,7 @@ export interface IConfigParams {
 }
 
 export class DatabaseConnector {
-  private static connector: DatabaseConnector;
+  private static connector: DatabaseConnector | null;
 
   private constructor(private readonly _db: Knex) {}
 
@@ -40,6 +40,7 @@ export class DatabaseConnector {
     }
 
     await DatabaseConnector.connector.db.destroy();
+    DatabaseConnector.connector = null;
   }
 
   static async connect(
@@ -74,6 +75,11 @@ export class DatabaseConnector {
 
     const checker = (): Promise<string> =>
       new Promise((resolve, reject) => {
+        if (!DatabaseConnector.connector) {
+          reject('Database connector instance not exist');
+          return;
+        }
+
         const db = DatabaseConnector.connector.db;
 
         db.raw('SELECT 1')
