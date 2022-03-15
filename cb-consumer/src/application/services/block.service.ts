@@ -55,7 +55,7 @@ export class BlockService implements BlockServiceInterface {
   };
 
   private checkBlock = (block: Block, previousBlocks: Block[]): boolean => {
-    if (block.hash === null) {
+    if (block.previousHash === null) {
       return true;
     }
 

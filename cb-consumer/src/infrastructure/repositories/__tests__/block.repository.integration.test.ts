@@ -5,7 +5,7 @@ import { BlockRepositoryInterface } from '../block.repository.interface';
 import { BlockRepository } from '../block.repository';
 import { Block } from '../../../domain/entities/block.entity';
 import { ValueData } from '../../../domain/value-objects/value-data';
-import { createBlocksSyncHappyPath } from './mocks/blocks.happy.path.mock';
+import { createBlocksSyncHappyPath } from '../../../domain/entities/__tests__/mocks/blocks.happy.path.mock';
 import { isSuccessAssert } from '../../../common/__tests__/helpers/isSuccessAssert';
 import { LoggerServiceMock } from '../../../common/services/mocks/logger.service.mock';
 
